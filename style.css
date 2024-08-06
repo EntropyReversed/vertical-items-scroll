@@ -42,6 +42,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: #222222;
 }
 
 /* body:before {
@@ -58,6 +59,18 @@ body {
 .vertical-cards {
   position: relative;
   width: 100%;
+  /* margin-top: -50vh; */
+}
+
+.vertical-cards__img {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 100px;
+  height: 200px;
+  background: #222222;
+  box-shadow: 0 0 0 1px white;
+  opacity: 0;
 }
 
 .card {
@@ -82,7 +95,8 @@ body {
   align-items: center;
   gap: 10rem;
   width: 100%;
-  padding-bottom: 100vh;
+  padding-bottom: 40vh;
+  margin-top: -40vh;
   will-change: transform;
 }
 
@@ -91,6 +105,7 @@ body {
   top: 0;
   width: 100%;
   height: 100vh;
+  /* margin-bottom: -60vh; */
 }
 
 .graphs-and-images .animated-graph {

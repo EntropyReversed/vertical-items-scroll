@@ -5,7 +5,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { AnimatedGraph } from './AnimatedGraph';
 import Lenis from 'lenis';
 
-const lenis = new Lenis();
+const lenis = new Lenis({
+  lerp: 0.15
+});
 
 function raf(time) {
   lenis.raf(time);
@@ -17,10 +19,11 @@ requestAnimationFrame(raf);
 gsap.registerPlugin(ScrollTrigger);
 
 class VerticalCardsAnimation {
-  constructor({ wrapSelector, cardSelector, graphSelector }) {
+  constructor({ wrapSelector, cardSelector, graphSelector, imgSelector }) {
     this.wrap = document.querySelector(wrapSelector);
     this.cards = this.wrap.querySelectorAll(cardSelector);
     this.graphs = this.wrap.querySelectorAll(graphSelector);
+    this.images = this.wrap.querySelectorAll(imgSelector);
     this.initAnimation();
   }
 
@@ -29,10 +32,9 @@ class VerticalCardsAnimation {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: card,
-          start: () => `top bottom-=30%`,
+          start: () => `top bottom-=20%`,
           end: () => `top top`,
           scrub: 1,
-          // markers: true,
           invalidateOnRefresh: true,
         },
       });
@@ -43,9 +45,8 @@ class VerticalCardsAnimation {
         .to(cardInner, {
           scale: 1,
           opacity: 1,
-          // delay: 1,
           duration: 1.5,
-        })
+        }, 'start')
         .to(
           this.graphs[index],
           {
@@ -53,14 +54,17 @@ class VerticalCardsAnimation {
             scale: 1,
             duration: 1.5,
           },
-          '<'
+          'start'
         )
-        .to(this.graphs[index], {
-          opacity: 0,
-          scale: 0.8,
-          delay: 0.2,
-          duration: 1,
-        });
+        .to(
+          this.images[index],
+          {
+            opacity: 1,
+            duration: 1.5,
+          },
+          'start'
+        )
+
 
       if (index !== this.cards.length - 1) {
         timeline
@@ -70,7 +74,6 @@ class VerticalCardsAnimation {
               scale: 0.3,
               duration: 2,
             }
-            // '<-=0.5'
           )
           .to(
             cardInner,
@@ -79,7 +82,18 @@ class VerticalCardsAnimation {
               duration: 1,
             },
             '<'
-          );
+          )        
+          .to(this.graphs[index], {
+            opacity: 0,
+            scale: 0.8,
+            delay: 0.2,
+            duration: 1,
+          }, 'start+=1.5')
+          .to(this.images[index], {
+            opacity: 0,
+            delay: 0.2,
+            duration: 1,
+          }, 'start+=1.5');
       }
     });
   }
@@ -89,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectors = {
     cardsSelector: '.vertical-cards',
     graphSelector: '.animated-graph',
+    imgSelector: '.vertical-cards__img',
   };
   const verticalCardsWrap = document.querySelector(selectors.cardsSelector);
   const allAnimatedGraphs = document.querySelectorAll(selectors.graphSelector);
@@ -98,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
       wrapSelector: selectors.cardsSelector,
       cardSelector: '.card',
       graphSelector: selectors.graphSelector,
+      imgSelector: selectors.imgSelector,
     });
   }
 
